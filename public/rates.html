@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Milk Dairy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head><body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+(async () => {
+await boot('rates');
+$('#app').innerHTML = `<div class="card p-3 mb-4"><h6>Add rate slab</h6><form id="f" class="row g-2">
+<div class="col-md-2"><select class="form-select" name="milk_type"><option>cow</option><option>buffalo</option></select></div>
+<div class="col-md-1"><input class="form-control" type="number" step="0.1" name="fat_min" placeholder="Fat min" required></div>
+<div class="col-md-1"><input class="form-control" type="number" step="0.1" name="fat_max" placeholder="Fat max" required></div>
+<div class="col-md-1"><input class="form-control" type="number" step="0.1" name="snf_min" placeholder="SNF min" required></div>
+<div class="col-md-1"><input class="form-control" type="number" step="0.1" name="snf_max" placeholder="SNF max" required></div>
+<div class="col-md-2"><input class="form-control" type="number" step="0.01" name="rate" placeholder="₹/litre" required></div>
+<div class="col-md-2"><input class="form-control" type="date" name="effective_from" required></div>
+<div class="col-md-2"><button class="btn btn-leaf w-100">Add slab</button></div></form></div>
+<div class="card p-3"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Type</th><th>Fat range</th><th>SNF range</th><th>Rate/L</th><th>From</th><th></th></tr></thead><tbody id="tbl"></tbody></table></div></div>`;
+async function load() {
+  const d = await api('/rates');
+  if (!$('#f').elements.effective_from.value) $('#f').elements.effective_from.value = d.today;
+  $('#tbl').innerHTML = d.rows.map((r) => `<tr><td>${r.milk_type}</td><td>${r.fat_min} – ${r.fat_max}</td><td>${r.snf_min} – ${r.snf_max}</td><td>${money(r.rate_per_litre)}</td><td>${r.effective_from}</td>
+<td><button class="btn btn-sm btn-outline-danger" data-del="${r.rate_id}">Delete</button></td></tr>`).join('');
+}
+$('#f').addEventListener('submit', act(async (e) => { e.preventDefault(); await api('/rates', 'POST', formData(e.target)); flash('Rate slab added.'); load(); }));
+$('#tbl').addEventListener('click', act(async (e) => {
+  const id = e.target.dataset.del; if (!id || !confirm('Delete slab?')) return;
+  await api('/rates/' + id, 'DELETE'); load();
+}));
+load();
+})().catch((e) => { if (e.message !== 'login') console.error(e); });
+</script>
+</body></html>

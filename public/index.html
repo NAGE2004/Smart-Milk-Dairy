@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Milk Dairy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/login-flow.css?v=20261115-premium2" rel="stylesheet">
+</head>
+<body>
+  <div id="app-root"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+  (() => {
+    const root = document.getElementById('app-root');
+
+    const logo = `
+      <a class="mf-brand" href="#" data-screen="home" aria-label="Smart Milk Dairy home">
+        <span class="mf-cow">🐄</span>
+        <span class="mf-brand-name">Smart Milk <b>Dairy</b></span>
+      </a>`;
+
+    function nav() {
+      return `
+        <header class="mf-navbar">
+          ${logo}
+          <nav class="mf-navlinks" aria-label="Main navigation">
+            <a href="#" data-screen="home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#products">Products</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <a class="mf-nav-cta" href="#system-access">Portal Login <span>↗</span></a>
+        </header>`;
+    }
+
+    function homePage() {
+      return `
+        ${nav()}
+        <main>
+          <section class="mf-hero" id="home">
+            <div class="mf-hero-overlay"></div>
+            <section class="mf-hero-copy">
+              <p class="mf-eyebrow"><span class="mf-live-dot"></span> DIGITAL DAIRY MANAGEMENT PLATFORM</p>
+              <span class="mf-yellow-line"></span>
+              <h1>Every drop.<br>Every farmer.<br><em>One smart system.</em></h1>
+              <p class="mf-hero-subtitle">Smart Milk Collection &amp; Dairy Management System</p>
+              <p class="mf-hero-description">Bring farmer records, milk collection, quality checks, payments and dairy operations together in one easy-to-use digital platform.</p>
+              <div class="mf-hero-actions">
+                <a class="mf-btn-yellow" href="#system-access">System Access <span>→</span></a>
+                <a class="mf-btn-outline" href="#about">Explore Project</a>
+              </div>
+              <div class="mf-feature-row">
+                <span>🥛 Milk Collection</span>
+                <span>👨‍🌾 Farmer Management</span>
+                <span>📊 Payments &amp; Reports</span>
+              </div>
+            </section>
+
+          </section>
+
+          <section class="mf-stats-strip" aria-label="Project modules">
+            <div><strong>01</strong><span>Centralized database</span></div>
+            <div><strong>02</strong><span>Role-based access</span></div>
+            <div><strong>03</strong><span>Digital collection records</span></div>
+            <div><strong>04</strong><span>Reports &amp; monitoring</span></div>
+          </section>
+
+          <section class="mf-section mf-about" id="about">
+            <div class="mf-section-heading">
+              <span class="mf-kicker">ABOUT THE PROJECT</span>
+              <h2>Making dairy management <em>simple and organized</em></h2>
+              <p>Smart Milk Dairy is a web-based dairy management system designed to digitize routine dairy activities. It keeps farmer details, milk collection entries, quality readings, payment records and sales information organized in a centralized database.</p>
+            </div>
+            <div class="mf-overview-grid">
+              <article class="mf-overview-card"><span>🎯</span><h3>Our objective</h3><p>Reduce manual record keeping and make dairy information easier to access and review.</p></article>
+              <article class="mf-overview-card"><span>🗂️</span><h3>Centralized records</h3><p>Store farmer, collection, payment and product information in a MySQL database.</p></article>
+              <article class="mf-overview-card"><span>🔎</span><h3>Better visibility</h3><p>Help authorized users review daily operations, quality alerts and reports.</p></article>
+            </div>
+          </section>
+
+          <section class="mf-section mf-services" id="services">
+            <div class="mf-section-heading">
+              <span class="mf-kicker">WHAT THE SYSTEM DOES</span>
+              <h2>Services &amp; <em>management features</em></h2>
+              <p>Explore the main functions available inside the Smart Milk Dairy application.</p>
+            </div>
+            <div class="mf-service-grid">
+              <article class="mf-service-card"><span class="mf-service-icon">👨‍🌾</span><h3>Farmer Management</h3><p>Maintain farmer profiles, contact details, village information and account records.</p></article>
+              <article class="mf-service-card"><span class="mf-service-icon">🥛</span><h3>Milk Collection</h3><p>Record morning and evening milk quantity, milk type, Fat and SNF readings.</p></article>
+              <article class="mf-service-card"><span class="mf-service-icon">⚖️</span><h3>Rate Calculation</h3><p>Match milk quality readings with configured rate-chart slabs to calculate collection value.</p></article>
+              <article class="mf-service-card"><span class="mf-service-icon">🔔</span><h3>Smart Alerts</h3><p>Flag configured milk-quality or collection changes so staff can review them.</p></article>
+              <article class="mf-service-card"><span class="mf-service-icon">💳</span><h3>Payments &amp; Transactions</h3><p>Prepare farmer settlements, record deductions and track payment status.</p></article>
+              <article class="mf-service-card"><span class="mf-service-icon">📈</span><h3>Reports &amp; Inventory</h3><p>Review collection summaries, sales entries and available dairy product stock.</p></article>
+            </div>
+          </section>
+
+          <section class="mf-products-section" id="products">
+            <div class="mf-section mf-products-inner">
+              <div class="mf-section-heading">
+                <span class="mf-kicker">DAIRY PRODUCTS</span>
+                <h2>Products managed <em>in the system</em></h2>
+                <p>The inventory module can maintain stock and sales records for these dairy products and supplies.</p>
+              </div>
+              <div class="mf-product-grid">
+                <article class="mf-product-card"><div class="mf-product-art milk-art">🥛</div><h3>Fresh Milk</h3><p>Milk stock and litre-based sales records.</p></article>
+                <article class="mf-product-card"><div class="mf-product-art curd-art">🥣</div><h3>Curd</h3><p>Curd stock and kilogram-based sales records.</p></article>
+                <article class="mf-product-card"><div class="mf-product-art ghee-art">🧈</div><h3>Ghee</h3><p>Ghee inventory and sales tracking.</p></article>
+                <article class="mf-product-card"><div class="mf-product-art paneer-art">🧀</div><h3>Paneer</h3><p>Paneer stock and sales tracking.</p></article>
+                <article class="mf-product-card"><div class="mf-product-art feed-art">🌾</div><h3>Cattle Feed</h3><p>Feed stock quantity and sales records.</p></article>
+              </div>
+            </div>
+          </section>
+
+          <section class="mf-section mf-workflow" id="workflow">
+            <div class="mf-section-heading">
+              <span class="mf-kicker">HOW IT WORKS</span>
+              <h2>From milk collection to <em>farmer payment</em></h2>
+              <p>A clear workflow helps the dairy team manage daily operations.</p>
+            </div>
+            <div class="mf-steps">
+              <div class="mf-step"><b>01</b><span>👨‍🌾</span><h3>Register farmer</h3><p>Create and maintain farmer records.</p></div>
+              <div class="mf-step"><b>02</b><span>🥛</span><h3>Record milk</h3><p>Enter quantity, shift, Fat and SNF.</p></div>
+              <div class="mf-step"><b>03</b><span>⚖️</span><h3>Calculate value</h3><p>Use the configured rate chart for pricing.</p></div>
+              <div class="mf-step"><b>04</b><span>💳</span><h3>Manage payment</h3><p>Prepare settlement and record payment status.</p></div>
+            </div>
+          </section>
+
+          <section class="mf-contact-section" id="contact">
+            <div class="mf-contact-content">
+              <div><span class="mf-kicker">YOUR DAIRY, CONNECTED</span><h2>Better records. Clearer decisions.</h2><p>Explore the project and its modules first. Authorized users can sign in to manage daily dairy operations whenever they are ready.</p></div>
+              <a class="mf-btn-yellow" href="#system-access">System Access <span>→</span></a>
+            </div>
+          </section>
+
+          <section class="mf-section mf-access-section" id="system-access">
+            <div class="mf-section-heading">
+              <span class="mf-kicker">AUTHORIZED USERS</span>
+              <h2>System <em>Access</em></h2>
+              <p>Visitors can explore the entire project without signing in. Admin, staff and farmers can sign in here to use their authorized features.</p>
+            </div>
+            <div class="mf-login-card mf-inline-login">
+              <div class="mf-login-card-brand">
+                <div class="mf-logo-cow">🐄</div>
+                <div class="mf-brand-name">Smart Milk <b>Dairy</b></div>
+                <span class="mf-brand-underline"></span>
+              </div>
+              <p class="mf-card-subtitle">Sign in to the management system</p>
+              <div class="mf-login-error" id="login-error" role="alert"></div>
+              <form id="login-form" data-type="admin">
+                <label for="login-type">Account type</label>
+                <select id="login-type" class="mf-input" aria-label="Account type">
+                  <option value="admin">Admin / Staff</option>
+                  <option value="farmer">Farmer</option>
+                </select>
+                <label for="username">Username / Mobile</label>
+                <input id="username" name="username" class="mf-input" placeholder="Enter username or mobile" autocomplete="username" required>
+                <label for="password">Password</label>
+                <div class="mf-password-wrap">
+                  <input id="password" name="password" class="mf-input" type="password" placeholder="Enter password" autocomplete="current-password" required>
+                  <button type="button" class="mf-show-password" aria-label="Show password">◉</button>
+                </div>
+                <button class="mf-submit" type="submit">Sign In →</button>
+              </form>
+            </div>
+          </section>
+        </main>
+        <footer class="mf-footer"><a class="mf-footer-brand" href="#home">🐄 Smart Milk Dairy</a><span>Smart Milk Collection &amp; Dairy Management System</span><span>Designed for smarter dairy operations</span><a href="#home">Back to top ↑</a></footer>`;
+    }
+
+    function bindNavigation() {
+      root.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const hash = link.getAttribute('href');
+          const target = hash && hash.length > 1 ? document.querySelector(hash) : document.querySelector('#home');
+          if (target) { event.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+      });
+    }
+
+
+
+    function bindSectionAnimations() {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const sections = [...root.querySelectorAll('main > section')];
+      const revealTargets = [];
+
+      sections.forEach((section, sectionIndex) => {
+        section.classList.add('mf-premium-section', `mf-premium-section-${sectionIndex % 4}`);
+        const heading = section.querySelector('.mf-section-heading, .mf-contact-content, .mf-hero-copy');
+        if (heading && !heading.classList.contains('mf-hero-copy')) {
+          heading.classList.add('mf-premium-reveal', 'mf-premium-heading');
+          revealTargets.push(heading);
+        }
+        const cards = section.querySelectorAll('.mf-overview-card,.mf-service-card,.mf-product-card,.mf-step,.mf-stats-strip > div');
+        cards.forEach((card, index) => {
+          card.classList.add('mf-premium-reveal', 'mf-premium-card');
+          card.style.setProperty('--mf-premium-delay', `${Math.min(index * 120, 600)}ms`);
+          revealTargets.push(card);
+        });
+      });
+
+      const heroCopy = root.querySelector('.mf-hero-copy');
+      if (heroCopy && !reduceMotion) heroCopy.classList.add('mf-premium-hero-in');
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealTargets.forEach(el => el.classList.add('mf-premium-visible'));
+      } else {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('mf-premium-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -45px 0px' });
+        revealTargets.forEach(el => observer.observe(el));
+      }
+
+      // Reusable click feedback for calls-to-action; does not intercept navigation or forms.
+      root.querySelectorAll('.mf-btn-yellow,.mf-btn-outline,.mf-nav-cta,.mf-submit').forEach(button => {
+        button.addEventListener('pointerdown', event => {
+          const rect = button.getBoundingClientRect();
+          button.style.setProperty('--mf-ripple-x', `${event.clientX - rect.left}px`);
+          button.style.setProperty('--mf-ripple-y', `${event.clientY - rect.top}px`);
+          button.classList.remove('mf-ripple');
+          void button.offsetWidth;
+          button.classList.add('mf-ripple');
+        });
+      });
+
+      const navLinks = [...root.querySelectorAll('.mf-navlinks a[href^="#"]')];
+      if ('IntersectionObserver' in window && navLinks.length) {
+        const spy = new IntersectionObserver(entries => entries.forEach(entry => {
+          if (entry.isIntersecting) navLinks.forEach(link =>
+            link.classList.toggle('mf-nav-active', link.getAttribute('href') === `#${entry.target.id}`)
+          );
+        }), { rootMargin: '-25% 0px -60% 0px' });
+        sections.forEach(section => { if (section.id) spy.observe(section); });
+      }
+    }
+
+    function bindLogin() {
+      const form = root.querySelector('#login-form');
+      if (!form) return;
+      const password = form.querySelector('#password');
+      const loginType = form.querySelector('#login-type');
+      loginType.addEventListener('change', () => { form.dataset.type = loginType.value; });
+      form.querySelector('.mf-show-password').addEventListener('click', () => {
+        const visible = password.type === 'password';
+        password.type = visible ? 'text' : 'password';
+        form.querySelector('.mf-show-password').textContent = visible ? '◎' : '◉';
+      });
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const button = form.querySelector('.mf-submit');
+        const errorBox = root.querySelector('#login-error');
+        errorBox.textContent = '';
+        button.disabled = true;
+        button.textContent = 'Signing in…';
+        try {
+          const data = await api('/login', 'POST', {
+            username: form.elements.username.value.trim(),
+            password: form.elements.password.value,
+            loginType: form.dataset.type
+          });
+          window.location.href = data.role === 'farmer' ? 'my.html' : 'dashboard.html';
+        } catch (error) {
+          errorBox.textContent = error.message || 'Login failed. Please try again.';
+          button.disabled = false;
+          button.innerHTML = 'Sign In →';
+        }
+      });
+    }
+
+    function render() {
+      root.innerHTML = homePage();
+      bindNavigation();
+      bindSectionAnimations();
+      bindLogin();
+    }
+
+    // Keep the public project homepage visible even when a user has an active session.
+    // Authentication is only requested when an authorized user submits the inline form.
+    render();
+  })();
+  </script>
+</body>
+</html>

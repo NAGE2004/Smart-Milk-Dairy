@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Milk Dairy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+(async () => {
+  await boot('my.html');
+  $('#app').innerHTML = '<div id="top"></div>';
+
+  async function load(q = '') {
+    const d = await api('/my' + q);
+    const f = d.farmer;
+
+    const stat = (label, val, type, icon) => `
+      <div class="col-md-4">
+        <div class="stat-card ${type}">
+          <div class="stat-label">${label}</div>
+          <div class="stat-value">${val}</div>
+          <div class="stat-icon">${icon}</div>
+        </div>
+      </div>`;
+
+    $('#app').innerHTML = `
+    <div class="page-header mb-4">
+      <h4>Welcome, ${esc(f.name)} 👋</h4>
+      <p>Farmer ID ${f.farmer_id} · ${esc(f.village)} · ${esc(f.cattle_type)}</p>
+    </div>
+
+    ${d.recentDrop ? `<div class="alert alert-warning mb-4"><b>Your milk quantity dropped recently.</b> ${esc(d.recentDrop.detail)}. Please read the tips below to bring it back up.</div>` : ''}
+
+    <div class="row g-3 mb-4">
+      ${stat(`Litres (${d.start} → ${d.end})`, n2(d.totals.litres) + ' L', 'milk', '🥛')}
+      ${stat('Milk Value', money(d.totals.amount), 'amount', '💰')}
+      ${stat('Payment Pending', money(d.pending), 'pending', '⏳')}
+    </div>
+
+    <div class="card p-4 mb-4">
+      <h6 class="fw-bold mb-3">My Milk Collection</h6>
+      <form id="flt" class="row g-2 mb-3">
+        <div class="col-md-3"><input class="form-control" type="date" name="start" value="${d.start}"></div>
+        <div class="col-md-3"><input class="form-control" type="date" name="end" value="${d.end}"></div>
+        <div class="col-md-2"><button class="btn btn-primary w-100">Filter</button></div>
+      </form>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>Date</th><th>Shift</th><th>Type</th><th>Litres</th><th>Fat</th><th>SNF</th><th>Rate</th><th>Amount</th></tr></thead>
+          <tbody>
+            ${d.rows.map((r) => `<tr>
+              <td>${r.collection_date}</td><td>${r.shift}</td><td>${r.milk_type}</td>
+              <td>${n2(r.quantity_litres)}</td><td>${n1(r.fat)}</td><td>${n1(r.snf)}</td>
+              <td>${n2(r.rate_per_litre)}</td><td class="fw-semibold">${money(r.amount)}</td>
+            </tr>`).join('') || '<tr><td colspan="8" class="text-muted text-center py-4">No collections in this period.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card p-4 mb-4">
+      <h6 class="fw-bold mb-3">My Payments</h6>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>Period</th><th>Litres</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th>Paid on</th></tr></thead>
+          <tbody>
+            ${d.pays.map((p) => `<tr>
+              <td>${p.period_start} → ${p.period_end}</td>
+              <td>${n2(p.total_litres)}</td>
+              <td>${money(p.gross_amount)}</td>
+              <td>${money(p.deductions)}</td>
+              <td class="fw-bold">${money(p.net_amount)}</td>
+              <td><span class="badge ${p.status === 'paid' ? 'bg-success' : 'bg-warning'}">${p.status}</span></td>
+              <td>${p.paid_on || '—'}</td>
+            </tr>`).join('') || '<tr><td colspan="7" class="text-muted text-center py-4">No payments generated yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h6 class="fw-bold mb-3">Payment Transactions</h6>
+          <table class="table table-sm mb-0">
+            <thead><tr><th>Date</th><th>Amount</th><th>Mode</th><th>Reference</th></tr></thead>
+            <tbody>
+              ${d.txns.map((t) => `<tr>
+                <td>${t.txn_date}</td><td class="fw-semibold">${money(t.amount)}</td>
+                <td>${t.mode}</td><td>${esc(t.reference || '—')}</td>
+              </tr>`).join('') || '<tr><td colspan="4" class="text-muted text-center py-3">No payments received yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h6 class="fw-bold mb-3">Messages</h6>
+          ${d.msgs.map((n) => `<div class="border-bottom py-2">
+            <div class="small text-muted">${n.created_at.slice(5, 16)} · ${n.kind}</div>
+            <div>${esc(n.message)}</div>
+          </div>`).join('') || '<div class="text-muted">No messages yet.</div>'}
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-4 mt-4">
+      <h6 class="fw-bold mb-3">🐄 How to Increase Your Milk Quantity</h6>
+      <ol class="mb-0 ps-3">${d.tips.map((t) => `<li class="mb-2">${esc(t)}</li>`).join('')}</ol>
+    </div>`;
+
+    $('#flt').addEventListener('submit', act(async (e) => {
+      e.preventDefault();
+      const s = e.target;
+      load(`?start=${s.start.value}&end=${s.end.value}`);
+    }));
+  }
+  load();
+})().catch((e) => { if (e.message !== 'login') console.error(e); });
+</script>
+</body>
+</html>

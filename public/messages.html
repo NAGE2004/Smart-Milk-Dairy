@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Milk Dairy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head><body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+(async () => {
+const me = await boot('messages');
+const admin = me.role === 'admin';
+$('#app').innerHTML = `<div id="prov"></div>
+${admin ? `<div class="row g-3 mb-4">
+<div class="col-md-5"><div class="card p-3 h-100"><h6>Send a test message</h6><form id="test" class="d-flex gap-2">
+<input class="form-control" name="phone" placeholder="Your phone number" required><button class="btn btn-leaf">Test</button></form></div></div>
+<div class="col-md-7"><div class="card p-3 h-100"><h6>📢 Announcement to all active farmers</h6><form id="cast" class="d-flex gap-2">
+<input class="form-control" name="text" maxlength="300" placeholder="e.g. Milk collection closed tomorrow for festival" required><button class="btn btn-leaf">Send</button></form></div></div></div>` : ''}
+<div class="card p-3"><h6>Messages sent to farmers (latest 100)</h6><div class="table-responsive"><table class="table table-sm mb-0"><thead><tr><th>Time</th><th>Farmer</th><th>Type</th><th>Message</th><th>Phone status</th><th></th></tr></thead><tbody id="tbl"></tbody></table></div></div>`;
+const color = { sent: 'success', failed: 'danger', not_sent: 'secondary' };
+async function load() {
+  const d = await api('/messages');
+  $('#prov').innerHTML = d.provider
+    ? `<div class="alert alert-success">📱 <b>Real phone messages are ON</b> via ${esc(d.provider)}. Every collection, statement, payment and tip is sent to the farmer's phone.</div>`
+    : `<div class="alert alert-warning">📱 <b>Phone messaging is OFF.</b> Messages are only saved in the farmer portal. Set <code>SMS_PROVIDER</code> and your keys in <code>.env</code> (see README) to send real messages.</div>`;
+  $('#tbl').innerHTML = d.rows.map((r) => `<tr><td class="text-nowrap">${r.created_at.slice(5, 16)}</td><td>${esc(r.name)}<br><small class="text-muted">${esc(r.phone || 'no phone')}</small></td><td>${r.kind}</td><td>${esc(r.message)}</td>
+<td><span class="badge bg-${color[r.sms_status]}">${r.sms_status}</span>${r.sms_error && r.sms_status !== 'sent' ? `<br><small class="text-muted">${esc(r.sms_error)}</small>` : ''}</td>
+<td>${admin && r.sms_status !== 'sent' && r.phone ? `<button class="btn btn-sm btn-outline-secondary" data-id="${r.notification_id}">Resend</button>` : ''}</td></tr>`).join('')
+    || '<tr><td colspan="6" class="text-muted">No messages yet.</td></tr>';
+}
+if (admin) {
+  $('#test').addEventListener('submit', act(async (e) => { e.preventDefault(); const r = await api('/messages/test', 'POST', formData(e.target)); flash(r.message); }));
+  $('#cast').addEventListener('submit', act(async (e) => {
+    e.preventDefault(); const r = await api('/messages/broadcast', 'POST', formData(e.target)); e.target.reset();
+    flash(`Announcement: ${r.sent} sent to phones, ${r.failed} failed, ${r.not_sent} saved in portal only.`, r.failed ? 'warning' : 'success'); load();
+  }));
+}
+$('#tbl').addEventListener('click', act(async (e) => {
+  const id = e.target.dataset.id; if (!id) return;
+  await api(`/messages/${id}/resend`, 'POST'); flash('Message resent.'); load();
+}));
+await load();
+})().catch((e) => { if (e.message !== 'login') console.error(e); });
+</script>
+</body></html>

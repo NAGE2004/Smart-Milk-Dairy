@@ -1,0 +1,21 @@
+{
+  "name": "smart-dairy-village",
+  "version": "1.0.0",
+  "description": "Smart Milk Collection and Dairy Management System (Node.js, Express, MySQL)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "setup-db": "node scripts/setup-db.js",
+    "create-admin": "node scripts/create-admin.js",
+    "run-cycle": "node scripts/run-cycle.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "mysql2": "^3.11.0"
+  }
+}
